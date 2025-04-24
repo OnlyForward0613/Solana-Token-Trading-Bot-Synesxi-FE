@@ -1,11 +1,10 @@
-/* eslint-disable style/jsx-one-expression-per-line */
-/* eslint-disable unicorn/prefer-number-properties */
 /* eslint-disable no-console */
 /* eslint-disable no-alert */
 'use client';
-import { SIMULATE_TRADE } from '@/lib/queries';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
+
+import { SIMULATE_TRADE } from '@/lib/queries';
 
 export default function TradeSimulator() {
   const [tradeParams, setTradeParams] = useState({
