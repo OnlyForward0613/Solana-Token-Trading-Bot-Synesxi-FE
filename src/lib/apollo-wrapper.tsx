@@ -1,6 +1,7 @@
 'use client';
 import { ApolloProvider } from '@apollo/client';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+
 import apolloClient from './apollo';
 
 if (process.env.NODE_ENV === 'development') {

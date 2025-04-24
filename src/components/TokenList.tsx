@@ -1,8 +1,8 @@
-/* eslint-disable react/no-array-index-key */
-'use client';
-import { GET_TOKENS } from '@/lib/queries';
+'use client'
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
+
+import { GET_INITIAL_TOKENS, GET_TOKENS, SEARCH_TOKENS } from '@/lib/queries';
 
 const TokenCard = ({ token }: { token: any }) => (
   <div className="bg-white p-4 rounded-lg shadow" style={{ backgroundColor: 'gray', width: '50%' }}>
@@ -27,13 +27,26 @@ const TokenCard = ({ token }: { token: any }) => (
 
 export default function TokenList() {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data, error } = useQuery(GET_TOKENS, {
-    variables: { search: searchTerm || 'SOL' },
+  const [isSearching, setIsSearching] = useState(false);
+  const { data: initialData, loading: initialLoading } = useQuery(GET_INITIAL_TOKENS);
+  const { data: searchData, loading: searchLoading } = useQuery(SEARCH_TOKENS, {
+    variables: { search: searchTerm },
+    skip: !searchTerm
   });
 
-  if (error) {
-    return <p className="text-red-500">Error loading tokens</p>;
-  }
+  const tokens = searchTerm ? searchData?.tokens : initialData?.tokens;
+  const isLoading = initialLoading || (searchTerm && searchLoading);
+
+  const { data, loading, error } = useQuery(GET_TOKENS, {
+    variables: {
+      search: searchTerm,
+      limit: searchTerm ? 9 : 9, // Always show 9 items
+      offset: 0
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <section className="mb-8">
@@ -41,14 +54,28 @@ export default function TokenList() {
         type="text"
         placeholder="Search tokens..."
         className="p-2 border rounded w-full max-w-md mb-4"
-        onChange={e => setSearchTerm(e.target.value)}
+        onChange={e => {
+          setSearchTerm(e.target.value);
+          setIsSearching(e.target.value.length > 0);
+        }}
+        value={searchTerm}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data?.tokens?.map((token: any, index: any) => (
-          <TokenCard key={index} token={token} />
-        ))}
-      </div>
+      {isLoading ? (
+        <p>Loading tokens...</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {tokens?.length ? (
+            tokens.map((token:any) => (
+              <TokenCard key={token.address} token={token} />
+            ))
+          ) : (
+            <p className="text-gray-500">
+              {isSearching ? 'No tokens found' : 'Failed to load tokens'}
+            </p>
+          )}
+        </div>
+      )}
     </section>
   );
 }
