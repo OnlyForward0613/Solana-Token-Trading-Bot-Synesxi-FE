@@ -170,7 +170,7 @@ export default function TokenList() {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500 dark:text-gray-400">Result</span>
-                        <p className="font-medium">{entry.result}</p>
+                        <p className="font-medium break-all">{entry.result}</p>
                       </div>
                     </div>
                   </div>
