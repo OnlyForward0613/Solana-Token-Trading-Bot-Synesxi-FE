@@ -4,16 +4,12 @@ import { useState, Suspense } from 'react';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import TokenList from '@/components/TokenList';
-import TradeSimulator from '@/components/TradeSimulator';
 
 import SnipeNewTokenForm from '@/components/SnipeNewTokenForm';
-import TradeHistory from '@/components/TradeHistory';
 import TradingModeToggle from '@/components/TradingModeToggle';
 
 export default function DeFiDashboard() {
 
-  const [selectedToken, setSelectedToken] = useState(null);
-  const [tradeHistory, setTradeHistory] = useState([]);
   const [watchlist, setWatchlist] = useState<string[]>([]);
   const [tradingMode, setTradingMode] = useState('Manual');
 
@@ -29,14 +25,12 @@ export default function DeFiDashboard() {
         </div>
       </header>
 
-      <main className="container mx-auto p-4">
+      <main className="mx-auto p-4">
         <ErrorBoundary fallback={<p className="text-red-500">Critical error occurred</p>}>
           <Suspense fallback={<LoadingIndicator />}>
             <TradingModeToggle mode={tradingMode} onToggle={setTradingMode} />
-            <SnipeNewTokenForm onAdd={handleAddToWatchlist} />
             <TokenList />
-            <TradeSimulator />
-            <TradeHistory trades={tradeHistory} />
+            <SnipeNewTokenForm onAdd={handleAddToWatchlist} />
           </Suspense>
         </ErrorBoundary>
       </main>

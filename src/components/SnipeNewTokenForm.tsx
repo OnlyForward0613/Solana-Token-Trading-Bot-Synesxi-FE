@@ -18,7 +18,7 @@ export default function SnipeNewTokenForm({ onAdd }: any) {
   return (
     <div className="my-4">
       <input
-        className="border p-1 mr-2"
+        className="border p-1 mr-2 rounded"
         placeholder="Token address"
         value={address}
         onChange={e => setAddress(e.target.value)}
