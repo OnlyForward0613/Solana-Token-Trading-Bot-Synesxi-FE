@@ -7,6 +7,7 @@ import TokenList from '@/components/TokenList';
 
 import SnipeNewTokenForm from '@/components/SnipeNewTokenForm';
 import TradingModeToggle from '@/components/TradingModeToggle';
+import Watchlist from '@/components/WatchList';
 
 export default function DeFiDashboard() {
 
@@ -31,6 +32,7 @@ export default function DeFiDashboard() {
             <TradingModeToggle mode={tradingMode} onToggle={setTradingMode} />
             <TokenList />
             <SnipeNewTokenForm onAdd={handleAddToWatchlist} />
+            <Watchlist watchList={watchlist}></Watchlist>
           </Suspense>
         </ErrorBoundary>
       </main>
